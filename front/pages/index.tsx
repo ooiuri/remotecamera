@@ -1,47 +1,76 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { KeyboardEvent, RefObject, useEffect, useRef } from 'react'
+/* eslint-disable @next/next/no-img-element */
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import { KeyboardEvent, RefObject, useEffect, useRef } from "react";
 
-let leftTimer:NodeJS.Timeout;
-let rightTimer:NodeJS.Timeout;
-let upTimer:NodeJS.Timeout;
-let downTimer:NodeJS.Timeout;
+let leftTimer: NodeJS.Timeout;
+let rightTimer: NodeJS.Timeout;
+let upTimer: NodeJS.Timeout;
+let downTimer: NodeJS.Timeout;
 
+
+const BASE_URL = "http://192.168.1.10";
 const Home: NextPage = () => {
-  const upButton = useRef<HTMLButtonElement>(null)
-  const downButton = useRef<HTMLButtonElement>(null)
-  const leftButton = useRef<HTMLButtonElement>(null)
-  const rightButton = useRef<HTMLButtonElement>(null)
+  const upButton = useRef<HTMLButtonElement>(null);
+  const downButton = useRef<HTMLButtonElement>(null);
+  const leftButton = useRef<HTMLButtonElement>(null);
+  const rightButton = useRef<HTMLButtonElement>(null);
 
   function handleKeyDown(event: KeyboardEvent<Element>) {
-    if (event.key === 'ArrowUp') {
-      setTimer(upButton, upTimer);
+    if (event.key === "ArrowUp") {
+      handleClick(upButton, upTimer);
     }
-    if (event.key === 'ArrowLeft') {
-      setTimer(leftButton, leftTimer);
+    if (event.key === "ArrowLeft") {
+      handleClick(leftButton, leftTimer);
     }
-    if (event.key === 'ArrowRight') {
-      setTimer(rightButton, rightTimer);
+    if (event.key === "ArrowRight") {
+      handleClick(rightButton, rightTimer);
     }
-    if (event.key === 'ArrowDown') {
-      setTimer(downButton, downTimer);
-    }
+    if (event.key === "ArrowDown") {
+      handleClick(downButton, downTimer);    }
   }
-  function setTimer(button:RefObject<HTMLButtonElement>, timer: NodeJS.Timeout){
-    clearTimeout(timer)
+
+  function setTimer(
+    button: RefObject<HTMLButtonElement>,
+    timer: NodeJS.Timeout
+  ) {
+    clearTimeout(timer);
     timer = setTimeout(() => {
-      button.current?.blur()
-    }, 300)
-    button.current?.focus()
+      button.current?.blur();
+    }, 300);
+    button.current?.focus();
   }
+
+  function handleClick(button: RefObject<HTMLButtonElement>, timer: NodeJS.Timeout) {
+    if (button == upButton) {
+      setTimer(upButton, upTimer);
+      fetch(BASE_URL + "/led/on", { method: "PATCH" });
+    }
+    if (button == leftButton) {
+      setTimer(leftButton, leftTimer);
+      fetch(BASE_URL + "/led/toggle", { method: "PATCH" });
+    }
+    if (button == rightButton) {
+      setTimer(rightButton, rightTimer);
+      fetch(BASE_URL + "/led/toggle", { method: "PATCH" });
+    }
+    if (button == downButton) {
+      setTimer(downButton, downTimer);
+      fetch(BASE_URL + "/led/off", { method: "PATCH" });
+    }
+  }
+
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown as unknown as EventListener)
+    window.addEventListener(
+      "keydown",
+      handleKeyDown as unknown as EventListener
+    );
   }, []);
-  
+
   return (
-    <div className={styles.container} onKeyDown={ handleKeyDown }>
+    <div className={styles.container} onKeyDown={handleKeyDown}>
       <Head>
         <title>RemoteCamera | Controle a sua camera a distância</title>
         <meta name="description" content="Controle a sua camera a distância" />
@@ -49,27 +78,62 @@ const Home: NextPage = () => {
       </Head>
 
       <Image src="/logo.svg" alt="RemoteCamera" width={348} height={173} />
-      <main className={styles.main} onKeyPress={ handleKeyDown }>
+      <main className={styles.main} onKeyPress={handleKeyDown}>
         <div className={styles.keys}>
-          <button ref={ upButton } className={ styles.move}>
-            <img src="/arrow.svg" width="40" height="40"></img>
+          <button
+            ref={upButton}
+            onClick={() => handleClick(upButton, upTimer)}
+            className={styles.move}
+          >
+            <img src="/arrow.svg" width="40" height="40" 
+                alt="Move up"></img>
           </button>
         </div>
-        <div className={ styles.row }>
+        <div className={styles.row}>
           <div className={styles.keys}>
-            <button ref={ leftButton } className={ styles.move }>
-              <img src="/arrow.svg" className={ styles.arrowLeft } width="40" height="40"></img>
+            <button
+              ref={leftButton}
+              onClick={() => handleClick(leftButton, leftTimer)}
+              className={styles.move}
+            >
+              <img
+                src="/arrow.svg"
+                className={styles.arrowLeft}
+                width="40"
+                height="40"
+                alt="Move to the left"
+              ></img>
             </button>
           </div>
           <div className={styles.keys}>
-            <button ref={ rightButton } className={ styles.move}>
-              <img src="/arrow.svg" className={ styles.arrowRight } width="40" height="40"></img>
+            <button
+              ref={rightButton}
+              onClick={() => handleClick(rightButton, rightTimer)}
+              className={styles.move}
+            >
+              <img
+                src="/arrow.svg"
+                className={styles.arrowRight}
+                width="40"
+                height="40"
+                alt="Move to the right"
+              ></img>
             </button>
           </div>
         </div>
         <div className={styles.keys}>
-          <button ref={ downButton } className={ styles.move}>
-            <img src="/arrow.svg" className={ styles.arrowDown } width="40" height="40"></img>
+          <button
+            ref={downButton}
+            onClick={() => handleClick(downButton, downTimer)}
+            className={styles.move}
+          >
+            <img
+              src="/arrow.svg"
+              className={styles.arrowDown}
+              width="40"
+              height="40"
+              alt="Move down"
+            ></img>
           </button>
         </div>
       </main>
@@ -87,7 +151,7 @@ const Home: NextPage = () => {
         </a>
       </footer> */}
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
