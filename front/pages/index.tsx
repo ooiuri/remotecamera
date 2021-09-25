@@ -3,7 +3,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { KeyboardEvent, RefObject, useEffect, useRef } from "react";
+import { KeyboardEvent, RefObject, useEffect, useRef, useState } from "react";
+import { Joystick } from 'react-joystick-component';
 
 let leftTimer: NodeJS.Timeout;
 let rightTimer: NodeJS.Timeout;
@@ -11,7 +12,7 @@ let upTimer: NodeJS.Timeout;
 let downTimer: NodeJS.Timeout;
 
 
-const BASE_URL = "http://192.168.1.10";
+const BASE_URL = "http://10.0.0.97";
 const Home: NextPage = () => {
   const upButton = useRef<HTMLButtonElement>(null);
   const downButton = useRef<HTMLButtonElement>(null);
@@ -61,7 +62,22 @@ const Home: NextPage = () => {
       fetch(BASE_URL + "/led/off", { method: "PATCH" });
     }
   }
+  const [servo1Val, setServo1Val] = useState(90);
+  const [servo2Val, setServo2Val] = useState(90);
+  
+  const updateServos = () => {
+    fetch(BASE_URL + `/update?servo1=${servo1Val}&servo2=${servo2Val}`, { method: "get" });
+    console.log('updateServos: ', BASE_URL + `/update?servo1=${servo1Val}&servo2=${servo2Val}`)
+  }
+  const handleMove = ( e: any) => {
+    
+    const MIN = 0;
+    const MAX = 180;
 
+    console.log(e)
+    setServo1Val(Math.min(Math.max(Math.floor(servo1Val + e.x/50), MIN), MAX))
+    setServo2Val(Math.min(Math.max(Math.floor(servo2Val + e.y/50), MIN), MAX))
+  }
   useEffect(() => {
     window.addEventListener(
       "keydown",
@@ -79,7 +95,7 @@ const Home: NextPage = () => {
 
       <Image src="/logo.svg" alt="RemoteCamera" width={348} height={173} />
       <main className={styles.main} onKeyPress={handleKeyDown}>
-        <div className={styles.keys}>
+        {/* <div className={styles.keys}>
           <button
             ref={upButton}
             onClick={() => handleClick(upButton, upTimer)}
@@ -135,7 +151,15 @@ const Home: NextPage = () => {
               alt="Move down"
             ></img>
           </button>
-        </div>
+        </div> */}
+        <Joystick size={100} baseColor="blue" stickColor="white" move={handleMove} stop={updateServos}></Joystick>
+        <h3>Servo1 {servo1Val}</h3>
+        <input type="range" min="0" max="180" 
+          onChange={(e) => {console.log(Number(e.target.value)); setServo1Val(Number(e.target.value))}}/>
+        <h3>Servo2 {servo2Val}</h3>
+        <input type="range" min="0" max="180"
+          onChange={(e) => {console.log(Number(e.target.value)); setServo2Val(Number(e.target.value))}}/>
+        <button onClick={updateServos}>Enviar</button>
       </main>
 
       {/* <footer className={styles.footer}>
