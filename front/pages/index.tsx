@@ -71,8 +71,8 @@ const Home: NextPage = () => {
   }
   const handleMove = ( e: any) => {
     
-    const MIN = 0;
-    const MAX = 180;
+    const MIN = 15;
+    const MAX = 165;
 
     console.log(e)
     setServo1Val(Math.min(Math.max(Math.floor(servo1Val + e.x/50), MIN), MAX))
