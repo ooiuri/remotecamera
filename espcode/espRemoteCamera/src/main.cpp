@@ -81,10 +81,26 @@ AsyncWebServer server(80);
 
 const int led_WIFI = 16;
 
+// Set your Static IP address
+IPAddress local_IP(10, 0, 0, 65);
+// Set your Gateway IP address
+IPAddress gateway(10, 0, 0, 1);
+
+IPAddress subnet(255, 255, 0, 0);
+IPAddress primaryDNS(8, 8, 8, 8);   //optional
+IPAddress secondaryDNS(8, 8, 4, 4); //optional
+
+
 void setup() {
 
   Serial.begin(115200);
   pinMode(led_WIFI, OUTPUT);
+  
+   // Configures static IP address
+  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+    Serial.println("STA Failed to configure");
+  }
+
   WiFi.begin(ssid, password);
   digitalWrite(led_WIFI, HIGH);
 
