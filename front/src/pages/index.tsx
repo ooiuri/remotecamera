@@ -15,7 +15,7 @@ let downTimer: NodeJS.Timeout;
 
 import { CameraProvider } from '../contexts/CameraContext';
 
-const BASE_URL = "http://10.0.0.97";
+const BASE_URL = API_BASE_URL;
 
 const Home: NextPage = () => {
   const upButton = useRef<HTMLButtonElement>(null);
@@ -53,7 +53,7 @@ const Home: NextPage = () => {
       if (button == upButton) {
         setTimer(upButton, upTimer);
         try {
-          fetch(BASE_URL + "/led/on", { method: "PATCH" });
+          fetch(BASE_URL + "/move?servo1=0&servo2=-10", { method: "PATCH" });
         }
         catch(e){
           //
@@ -62,7 +62,7 @@ const Home: NextPage = () => {
       if (button == leftButton) {
         setTimer(leftButton, leftTimer);
         try {
-          fetch(BASE_URL + "/led/toggle", { method: "PATCH" });
+          fetch(BASE_URL + "/move?servo1=10&servo2=0", { method: "PATCH" });
         }
         catch(e){
           //
@@ -71,7 +71,7 @@ const Home: NextPage = () => {
       if (button == rightButton) {
         setTimer(rightButton, rightTimer);
         try{
-          fetch(BASE_URL + "/led/toggle", { method: "PATCH" });
+          fetch(BASE_URL + "/move?servo1=-10&servo2=0", { method: "PATCH" });
         }
         catch(e){
           //
@@ -80,7 +80,7 @@ const Home: NextPage = () => {
       if (button == downButton) {
         setTimer(downButton, downTimer);
         try{
-          fetch(BASE_URL + "/led/off", { method: "PATCH" });
+          fetch(BASE_URL + "/move?servo1=0&servo2=10", { method: "PATCH" });
         }
         catch(e){
           //
