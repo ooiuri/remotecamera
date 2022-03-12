@@ -53,7 +53,10 @@ const Home: NextPage = () => {
       if (button == upButton) {
         setTimer(upButton, upTimer);
         try {
-          fetch(BASE_URL + "/move?servo1=0&servo2=-10", { method: "PATCH" });
+          fetch(BASE_URL + "/move?servo1=0&servo2=-10", { 
+            method: "PATCH", 
+            referrerPolicy: "unsafe-url"
+          });
         }
         catch(e){
           //
@@ -62,7 +65,10 @@ const Home: NextPage = () => {
       if (button == leftButton) {
         setTimer(leftButton, leftTimer);
         try {
-          fetch(BASE_URL + "/move?servo1=10&servo2=0", { method: "PATCH" });
+          fetch(BASE_URL + "/move?servo1=10&servo2=0", { 
+            method: "PATCH", 
+            referrerPolicy: "unsafe-url"
+          });
         }
         catch(e){
           //
@@ -71,7 +77,10 @@ const Home: NextPage = () => {
       if (button == rightButton) {
         setTimer(rightButton, rightTimer);
         try{
-          fetch(BASE_URL + "/move?servo1=-10&servo2=0", { method: "PATCH" });
+          fetch(BASE_URL + "/move?servo1=-10&servo2=0", { 
+            method: "PATCH", 
+            referrerPolicy: "unsafe-url"
+          });
         }
         catch(e){
           //
@@ -80,7 +89,10 @@ const Home: NextPage = () => {
       if (button == downButton) {
         setTimer(downButton, downTimer);
         try{
-          fetch(BASE_URL + "/move?servo1=0&servo2=10", { method: "PATCH" });
+          fetch(BASE_URL + "/move?servo1=0&servo2=10", { 
+            method: "PATCH", 
+            referrerPolicy: "unsafe-url"
+          });
         }
         catch(e){
           //

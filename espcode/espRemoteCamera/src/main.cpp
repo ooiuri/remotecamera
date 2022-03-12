@@ -72,6 +72,10 @@ void moveServos(){
       previousMillis = currentMillis;
     }
   }
+  else {
+    servos[0].write(servoPos1);
+    servos[1].write(servoPos2);
+  }
 }
 
 char* ssid = WIFI_SSID;
